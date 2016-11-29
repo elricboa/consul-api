@@ -1,7 +1,6 @@
 apply plugin: "java"
 apply plugin: "idea"
 apply plugin: 'maven'
-apply plugin: 'signing'
 
 repositories {
 	mavenCentral()
@@ -35,39 +34,33 @@ artifacts {
 	archives javadocJar
 }
 
-def doUploadArchives = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+def doUploadArchives = project.hasProperty('mavenReleaseUsername') && project.hasProperty('mavenReleasePassword')
 if (doUploadArchives) {
 	group = "com.ecwid.consul"
 	archivesBaseName = "consul-api"
-	version = "1.2.1"
-
-	signing {
-		sign configurations.archives
-	}
+	version = "1.2.1-musically-mod-0.1"
 
 	uploadArchives {
 		repositories {
 			mavenDeployer {
-				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: sonatypeUsername, password: sonatypePassword)
+				repository(url: mavenReleaseUrl) {
+					authentication(userName: mavenReleaseUsername, password: mavenReleasePassword)
 				}
 
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: sonatypeUsername, password: sonatypePassword)
+				snapshotRepository(url: mavenSnapshotUrl) {
+					authentication(userName: mavenSnapshotUsername, password: mavenSnapshotPassword)
 				}
 
 				pom.project {
-					name 'Ecwid Consul API'
+					name 'Ecwid Consul API (Musical.ly Modification)'
 					packaging 'jar'
 					description 'Java client for Consul HTTP API (http://consul.io)'
-					url 'https://github.com/Ecwid/consul-api'
+					url 'https://github.com/yegong/consul-api'
 
 					scm {
-						connection 'scm:git:git@github.com:Ecwid/consul-api.git'
-						developerConnection 'scm:git:git@github.com:Ecwid/consul-api.git'
-						url 'https://github.com/Ecwid/consul-api.git'
+						connection 'scm:git:git@github.com:yegong/consul-api.git'
+						developerConnection 'scm:git:git@github.com:yegong/consul-api.git'
+						url 'https://github.com/yegong/consul-api.git'
 					}
 
 					licenses {
